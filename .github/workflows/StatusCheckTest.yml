@@ -1,4 +1,4 @@
-name: Status Check
+name: StatusCheckTest
 on:
  pull_request:
    branches: [ main ]
@@ -6,7 +6,7 @@ jobs:
   status-check:
     runs-on: windows-latest
     environment: 
-        name: 'Development'
+        name: 'Nav Env.'
     steps:
       - uses: actions/checkout@v3
       - name: Check connectivity
