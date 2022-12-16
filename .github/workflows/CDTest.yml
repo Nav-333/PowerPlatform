@@ -1,4 +1,4 @@
-name: ReleaseManagedSolution
+name: CDTest
 on:
  push:
    branches: [ main ]
