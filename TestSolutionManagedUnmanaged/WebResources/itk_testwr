@@ -1,0 +1,138 @@
+function changeBpfStagetoCalculate(primaryControl){
+    let formContext=primaryControl;
+    try{
+        debugger;
+        let STATUS_CODE_CALCULATED= 717710002; // 717710002 ~ Calculated
+        if(formContext.getControl("header_statuscode")){
+            statuscode=formContext.getAttribute("statuscode").getText();
+            if(statuscode == 'In Progress'){
+                formContext.getAttribute("statuscode").setValue(STATUS_CODE_CALCULATED);
+                let activeStage = formContext.data.process.getActiveStage();
+                let stageId = activeStage.getId();
+                let currentBPFInstanceID= formContext.data.process.getInstanceId();
+                let calculatedStageId= "bfbde683-f5af-46b9-bf54-225fe129fc7e";
+                let record = {};
+                record["activestageid@odata.bind"] = "/processstages(" + calculatedStageId + ")"; // Lookup
+                record.traversedpath =stageId + "," + calculatedStageId; // Text
+                Xrm.WebApi.online.updateRecord("hs_ylscmiassessment", currentBPFInstanceID, record).then(
+                    function success(result) {
+                        formContext.data.refresh();
+                    },
+                    function(error) {
+                        Xrm.Navigation.openErrorDialog({message: error.message}).then(
+                            function (success) {} ,
+                            function (error) {}
+                        );
+                    }
+                );
+                
+            }
+       }
+   }    
+
+   catch(e){
+       let exmsg = "";
+       if (e.message){
+           exmsg += e.message;
+       }
+       if (e.stack){
+           exmsg += "! stack: " + e.stack;
+       }
+       Xrm.Navigation.openErrorDialog({message: exmsg}).then(
+           function (success) {} ,
+           function (error) {}
+       );
+   }
+}
+
+function changeBpfStagetoWorkReuired(primaryControl){
+   let formContext=primaryControl
+    try{
+        debugger;
+        let STATUS_CODE_WORK_REQUIRED= 717710005; // 717710005 ~ Work Required
+        if(formContext.getControl("header_statuscode")){
+            statuscode=formContext.getAttribute("statuscode").getText();
+            if(statuscode == 'Pending Approval'){
+                formContext.data.process.movePrevious();
+                formContext.getAttribute("statuscode").setValue(STATUS_CODE_WORK_REQUIRED);
+            }
+       }
+    }    
+
+   catch(e){
+    let exmsg = "";
+    if (e.message){
+        exmsg += e.message;
+    }   
+    if (e.stack){
+        exmsg += "! stack: " + e.stack;
+    }
+    Xrm.Navigation.openErrorDialog({message: exmsg}).then(
+        function (success) {} ,
+        function (error) {});
+    }
+}
+
+function onStateChangeUpdateStatus(executionContext){
+    formContext=executionContext.getFormContext();
+    formContext.data.process.addOnStageChange(UpdateStaus);
+}
+
+function UpdateStaus(){
+    let activeStage = formContext.data.process.getActiveStage();
+    let stageName = activeStage.getName();
+    if(stageName == 'Pending Approval'){
+        formContext.getAttribute("statuscode").setValue(717710003);
+        formContext.data.save();
+    }
+}
+
+function changeBpfStagetoDiscontinued(primaryControl){
+    let formContext=primaryControl;
+    try{
+        debugger;
+        let STATUS_CODE_DISCONTINUED= 717710006; // 717710005 ~ Discontinued
+        if(formContext.getControl("header_statuscode")){
+            let activeStage = formContext.data.process.getActiveStage();
+            let stageId = activeStage.getId();
+            let stageName = activeStage.getName();
+            let currentBPFInstanceID= formContext.data.process.getInstanceId();
+            let discontinuedStageId= "0e8a3597-f5a6-4d1b-91e2-1af0974cecbc";
+            if(stageName == 'Pending Approval'){
+                formContext.data.process.moveNext();
+                formContext.data.refresh();
+                formContext.getAttribute("statuscode").setValue(STATUS_CODE_DISCONTINUED);
+            }
+            else if(stageName == 'In Progress'){
+                formContext.getAttribute("statuscode").setValue(STATUS_CODE_DISCONTINUED);
+                let record = {};
+                record["activestageid@odata.bind"] = "/processstages(" + discontinuedStageId + ")"; // Lookup
+                record.traversedpath =stageId + "," + discontinuedStageId; // Text
+                Xrm.WebApi.online.updateRecord("hs_ylscmiassessment", currentBPFInstanceID, record).then(
+                    function success(result) {
+                        formContext.data.refresh();
+                    },
+                    function(error) {
+                        Xrm.Navigation.openErrorDialog({message: error.message}).then(
+                            function (success) {} ,
+                            function (error) {}
+                        );
+                    }
+                );
+            }     
+       }
+    }    
+
+   catch(e){
+    let exmsg = "";
+    if (e.message){
+        exmsg += e.message;
+    }   
+    if (e.stack){
+        exmsg += "! stack: " + e.stack;
+    }
+    Xrm.Navigation.openErrorDialog({message: exmsg}).then(
+        function (success) {} ,
+        function (error) {});
+    }
+}
