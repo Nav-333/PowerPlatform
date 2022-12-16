@@ -6,7 +6,7 @@ jobs:
   convert-to-managed:
     runs-on: windows-latest
     environment: 
-      name: 'Bilal Env.'
+      name: 'Nav Env.'
     steps:
     - uses: actions/checkout@v2
     - name: Pack solution
@@ -44,7 +44,7 @@ jobs:
     needs: [ convert-to-managed ]
     runs-on: windows-latest
     environment: 
-      name: 'Production'    
+      name: 'Bilal Env.'    
     steps:
     - uses: actions/checkout@v2
     - name: Fetch solution from GH artifact store
