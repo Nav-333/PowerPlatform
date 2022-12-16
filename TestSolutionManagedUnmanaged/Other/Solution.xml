@@ -6,7 +6,7 @@
       <LocalizedName description="Test Solution Managed/Unmanaged " languagecode="1033" />
     </LocalizedNames>
     <Descriptions />
-    <Version>1.0.0.5</Version>
+    <Version>1.0.0.6</Version>
     <Managed>0</Managed>
     <Publisher>
       <UniqueName>defaultpublisherforitknocks</UniqueName>
@@ -79,8 +79,15 @@
     </Publisher>
     <RootComponents>
       <RootComponent type="1" schemaName="itk_testentity" behavior="0" />
-      <RootComponent type="61" schemaName="itk_testwr" behavior="0" />
+      <RootComponent type="61" schemaName="itk_testingwr" behavior="0" />
+      <RootComponent type="62" schemaName="itk_Test" behavior="0" />
+      <RootComponent type="80" schemaName="itk_Test" behavior="0" />
     </RootComponents>
-    <MissingDependencies />
+    <MissingDependencies>
+      <MissingDependency>
+        <Required type="61" schemaName="msdyn_/Images/AppModule_Default_Icon.png" displayName="msdyn_/Images/AppModule_Default_Icon.png" solution="AppModuleWebResources (2.5)" />
+        <Dependent type="80" schemaName="itk_Test" displayName="Test" />
+      </MissingDependency>
+    </MissingDependencies>
   </SolutionManifest>
 </ImportExportXml>
